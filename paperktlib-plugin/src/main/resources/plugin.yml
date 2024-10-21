@@ -1,0 +1,8 @@
+name: PaperKtLib
+version: "${version}"
+main: com.filkond.paperktlib.PaperKtLib
+author: FiLKoNd
+website: https://t.me/FiLKoNd
+api-version: '1.16.5'
+softdepend:
+  - Towny
