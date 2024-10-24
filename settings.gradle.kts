@@ -5,5 +5,4 @@ rootProject.name = "paperKtLib"
 include("paperktlib-plugin")
 include("paperktlib-towny")
 include("paperktlib-adventure")
-include("paperktlib-adventure")
 include("paperktlib-config")
