@@ -66,6 +66,10 @@ subprojects {
         useJUnitPlatform()
     }
 
+    tasks.jar {
+        enabled = false
+    }
+
     apply(plugin = "maven-publish")
     configure<PublishingExtension> {
         repositories {
