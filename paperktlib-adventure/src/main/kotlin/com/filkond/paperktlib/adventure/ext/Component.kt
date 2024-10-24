@@ -1,2 +1,21 @@
 package com.filkond.paperktlib.adventure.ext
 
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.minimessage.MiniMessage
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+
+private val mmSerializer = MiniMessage.miniMessage()
+private val legacySerializer = LegacyComponentSerializer.legacyAmpersand()
+
+fun String.deserialize(vararg resolvers: TagResolver, isLegacy: Boolean = false): Component =
+    if (isLegacy) legacySerializer.deserialize(this) else mmSerializer.deserialize(this, *resolvers)
+
+fun Collection<String>.deserialize(vararg resolvers: TagResolver, isLegacy: Boolean = false): Collection<Component> =
+    map { it.deserialize(*resolvers, isLegacy = isLegacy) }
+
+fun Component.serialize(isLegacy: Boolean = false): String = let { if (isLegacy) legacySerializer else mmSerializer }.serialize(this)
+fun Collection<Component>.serialize(isLegacy: Boolean = false): Collection<String> = map { it.serialize(isLegacy) }
+
+infix fun String.with(value: Any): TagResolver = Placeholder.parsed(this, value.toString())

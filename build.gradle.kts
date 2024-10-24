@@ -1,21 +1,36 @@
+import org.gradle.kotlin.dsl.test
+
 plugins {
     kotlin("jvm") version "2.0.20"
 }
 
-group = "com.filkond"
-version = "1.0-SNAPSHOT"
+allprojects {
+    apply(plugin = "org.jetbrains.kotlin.jvm")
 
-repositories {
-    mavenCentral()
-}
+    group = "com.filkond"
+    version = "1.0"
 
-dependencies {
-    testImplementation(kotlin("test"))
-}
+    repositories {
+        mavenCentral()
+        maven("https://repo.papermc.io/repository/maven-public/") {
+            name = "papermc-repo"
+        }
+    }
 
-tasks.test {
-    useJUnitPlatform()
-}
-kotlin {
-    jvmToolchain(18)
+    dependencies {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+        compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+    }
+
+    tasks.build {
+        dependsOn("shadowJar")
+    }
+
+    kotlin {
+        jvmToolchain(21)
+    }
+
+    tasks.test {
+        useJUnitPlatform()
+    }
 }

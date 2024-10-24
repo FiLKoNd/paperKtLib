@@ -1,4 +1,4 @@
-package com.filkond.paperktlib
+package com.filkond.paperktlib.plugin
 
 import org.bukkit.plugin.java.JavaPlugin
 

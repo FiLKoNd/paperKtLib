@@ -1,4 +1,4 @@
-package com.filkond.paperktlib.ext
+package com.filkond.paperktlib.towny.ext
 
 import com.palmergames.bukkit.towny.TownyAPI
 import com.palmergames.bukkit.towny.`object`.Nation

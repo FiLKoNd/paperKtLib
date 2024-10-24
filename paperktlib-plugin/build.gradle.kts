@@ -1,5 +1,7 @@
 dependencies {
     implementation(project(":paperktlib-towny"))
+    implementation(project(":paperktlib-adventure"))
+    implementation(project(":paperktlib-config"))
 }
 
 tasks.processResources {
