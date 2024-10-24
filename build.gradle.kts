@@ -12,6 +12,7 @@ repositories {
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "com.gradleup.shadow")
+    apply(plugin = "maven-publish")
 
     group = "com.filkond"
     version = "1.0"
@@ -70,31 +71,32 @@ subprojects {
         useJUnitPlatform()
     }
 
-    apply(plugin = "maven-publish")
-    configure<PublishingExtension> {
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/FiLKoNd/paperKtLib")
-                credentials {
-                    username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
-                    password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
+    if (!project.name.contains("plugin")) {
+        configure<PublishingExtension> {
+            repositories {
+                maven {
+                    name = "GitHubPackages"
+                    url = uri("https://maven.pkg.github.com/FiLKoNd/paperKtLib")
+                    credentials {
+                        username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+                        password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
+                    }
                 }
             }
-        }
-        publications {
-            create<MavenPublication>(project.name) {
-                artifact(tasks["sourcesJar"])
-                artifact(tasks["javadocJar"])
-                artifact(tasks.shadowJar)
-                artifactId = project.name
-                groupId = project.group.toString()
-                version = project.version.toString()
-                pom {
-                    developers {
-                        developer {
-                            id = "FiLKoNd"
-                            email = "fil.yt.pass@gmail.com"
+            publications {
+                create<MavenPublication>(project.name) {
+                    artifact(tasks["sourcesJar"])
+                    artifact(tasks["javadocJar"])
+                    artifact(tasks.shadowJar)
+                    artifactId = project.name
+                    groupId = project.group.toString()
+                    version = project.version.toString()
+                    pom {
+                        developers {
+                            developer {
+                                id = "FiLKoNd"
+                                email = "fil.yt.pass@gmail.com"
+                            }
                         }
                     }
                 }
