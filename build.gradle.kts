@@ -53,6 +53,10 @@ subprojects {
         dependsOn("sourcesJar", "javadocJar")
     }
 
+    tasks.clean {
+        delete("$rootDir/target")
+    }
+
     java {
         withSourcesJar()
         withJavadocJar()
@@ -64,10 +68,6 @@ subprojects {
 
     tasks.test {
         useJUnitPlatform()
-    }
-
-    tasks.jar {
-        enabled = false
     }
 
     apply(plugin = "maven-publish")
@@ -84,7 +84,9 @@ subprojects {
         }
         publications {
             create<MavenPublication>(project.name) {
-                from (components["java"])
+                artifact(tasks["sourcesJar"])
+                artifact(tasks["javadocJar"])
+                artifact(tasks.shadowJar)
                 artifactId = project.name
                 groupId = project.group.toString()
                 version = project.version.toString()
