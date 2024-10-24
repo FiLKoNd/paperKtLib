@@ -79,8 +79,19 @@ subprojects {
             }
         }
         publications {
-            register<MavenPublication>("gpr") {
-                from(components["java"])
+            create<MavenPublication>(project.name) {
+                from (components["java"])
+                artifactId = project.name
+                groupId = project.group.toString()
+                version = project.version.toString()
+                pom {
+                    developers {
+                        developer {
+                            id = "FiLKoNd"
+                            email = "fil.yt.pass@gmail.com"
+                        }
+                    }
+                }
             }
         }
     }
