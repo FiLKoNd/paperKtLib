@@ -2,12 +2,16 @@ import org.gradle.kotlin.dsl.test
 
 plugins {
     kotlin("jvm") version "2.1.0-Beta1"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "8.3.3"
 }
 
-allprojects {
+repositories {
+    mavenCentral()
+}
+
+subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "com.github.johnrengelman.shadow")
+    apply(plugin = "com.gradleup.shadow")
 
     group = "com.filkond"
     version = "1.0"
@@ -28,6 +32,32 @@ allprojects {
         dependsOn("shadowJar")
     }
 
+    tasks {
+        val sourcesJar by creating(Jar::class) {
+            archiveClassifier.set("sources")
+            from(sourceSets.main.get().allSource)
+            destinationDirectory.set(file("$rootDir/target"))
+        }
+
+        val javadocJar by creating(Jar::class) {
+            dependsOn.add(javadoc)
+            archiveClassifier.set("javadoc")
+            from(javadoc)
+            destinationDirectory.set(file("$rootDir/target"))
+        }
+    }
+
+    tasks.shadowJar {
+        destinationDirectory.set(file("$rootDir/target"))
+        archiveClassifier.set("")
+        dependsOn("sourcesJar", "javadocJar")
+    }
+
+    java {
+        withSourcesJar()
+        withJavadocJar()
+    }
+
     kotlin {
         jvmToolchain(21)
     }
@@ -35,9 +65,7 @@ allprojects {
     tasks.test {
         useJUnitPlatform()
     }
-}
 
-subprojects {
     apply(plugin = "maven-publish")
     configure<PublishingExtension> {
         repositories {
