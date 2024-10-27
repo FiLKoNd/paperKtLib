@@ -13,3 +13,4 @@ include(
     "paperktlib-adventure",
     "paperktlib-config"
 )
+include("paperktlib-paper")
