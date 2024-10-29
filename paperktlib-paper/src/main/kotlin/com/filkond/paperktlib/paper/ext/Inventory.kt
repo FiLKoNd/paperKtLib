@@ -1,4 +1,4 @@
-package com.filkond.paperktlib.paper
+package com.filkond.paperktlib.paper.ext
 
 import org.bukkit.Bukkit
 import org.bukkit.Material
