@@ -12,7 +12,7 @@ import net.kyori.adventure.title.Title
 sealed class Message {
     abstract val legacy: Boolean
 
-    abstract fun send(player: Audience, vararg resolvers: TagResolver)
+    abstract fun send(audience: Audience, vararg resolvers: TagResolver)
 }
 
 @Serializable
@@ -21,8 +21,8 @@ data class ChatMessage(
     val text: String,
     override val legacy: Boolean = false
 ) : Message() {
-    override fun send(player: Audience, vararg resolvers: TagResolver) {
-        player.sendMessage(text.deserialize(*resolvers, isLegacy = legacy))
+    override fun send(audience: Audience, vararg resolvers: TagResolver) {
+        audience.sendMessage(text.deserialize(*resolvers, isLegacy = legacy))
     }
 }
 
@@ -32,8 +32,8 @@ data class ActionMessage(
     val text: String,
     override val legacy: Boolean = false
 ) : Message() {
-    override fun send(player: Audience, vararg resolvers: TagResolver) {
-        player.sendActionBar(text.deserialize(*resolvers, isLegacy = legacy))
+    override fun send(audience: Audience, vararg resolvers: TagResolver) {
+        audience.sendActionBar(text.deserialize(*resolvers, isLegacy = legacy))
     }
 }
 
@@ -47,7 +47,7 @@ data class TitleMessage(
     val fadeOut: Long = 3,
     override val legacy: Boolean = false
 ) : Message() {
-    override fun send(player: Audience, vararg resolvers: TagResolver) {
+    override fun send(audience: Audience, vararg resolvers: TagResolver) {
         Title.title(
             title.deserialize(*resolvers, isLegacy = legacy),
             subtitle.deserialize(*resolvers, isLegacy = legacy),
