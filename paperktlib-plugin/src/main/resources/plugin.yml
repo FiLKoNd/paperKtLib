@@ -3,6 +3,6 @@ version: "${version}"
 main: com.filkond.paperktlib.plugin.PaperKtLib
 author: FiLKoNd
 website: https://t.me/FiLKoNd
-api-version: '1.16.5'
+api-version: 1.16
 softdepend:
   - Towny
