@@ -1,4 +1,4 @@
-name: PaperKtLib
+name: paperKtLib
 version: "${version}"
 main: com.filkond.paperktlib.plugin.PaperKtLib
 author: FiLKoNd
