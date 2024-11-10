@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":paperktlib-adventure"))
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+    compileOnly(project(":paperktlib-adventure"))
+    compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 }
