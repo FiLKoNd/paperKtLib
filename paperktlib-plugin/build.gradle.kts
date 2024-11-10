@@ -1,5 +1,6 @@
 dependencies {
     implementation(project(":paperktlib-towny"))
+    implementation(project(":paperktlib-paper"))
     implementation(project(":paperktlib-adventure"))
     implementation(project(":paperktlib-config"))
 }
