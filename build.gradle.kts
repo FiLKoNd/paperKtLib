@@ -15,7 +15,7 @@ subprojects {
     apply(plugin = "maven-publish")
 
     group = "com.filkond"
-    version = "1.0.5"
+    version = "1.0.6"
 
     repositories {
         mavenCentral()
@@ -51,6 +51,7 @@ subprojects {
     tasks.shadowJar {
         destinationDirectory.set(file("$rootDir/target"))
         archiveClassifier.set("")
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         dependsOn("sourcesJar", "javadocJar")
     }
 
