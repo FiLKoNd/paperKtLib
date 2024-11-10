@@ -1,7 +1,7 @@
 import org.gradle.kotlin.dsl.test
 
 plugins {
-    kotlin("jvm") version "2.1.0-Beta1"
+    kotlin("jvm") version "2.0.21"
     id("com.gradleup.shadow") version "8.3.3"
 }
 
@@ -15,7 +15,7 @@ subprojects {
     apply(plugin = "maven-publish")
 
     group = "com.filkond"
-    version = "1.0.4"
+    version = "1.0.5"
 
     repositories {
         mavenCentral()
