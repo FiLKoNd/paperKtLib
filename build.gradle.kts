@@ -13,7 +13,7 @@ subprojects {
     apply(plugin = "maven-publish")
 
     group = "com.filkond"
-    version = "1.0.9"
+    version = "1.1.0"
 
     repositories {
         mavenCentral()
@@ -63,7 +63,7 @@ subprojects {
     }
 
     kotlin {
-        jvmToolchain(21)
+        jvmToolchain(17)
     }
 
     tasks.test {
