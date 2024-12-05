@@ -10,17 +10,17 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
 abstract class ConfigManager(
-    protected val folder: File,
+    val folder: File,
     private val formatter: StringFormat
 ) {
     val configs: MutableMap<File, Config> = mutableMapOf()
 
-    protected inline fun <reified T : Config> config(fileName: String): T {
+    inline fun <reified T : Config> config(fileName: String): T {
         val file = File(folder, fileName)
         return config(file, T::class)
     }
 
-    protected fun <T : Config> config(file: File, clazz: KClass<T>): T {
+    fun <T : Config> config(file: File, clazz: KClass<T>): T {
         val config = loadConfig(file, clazz)
         configs[file] = config
         return config
