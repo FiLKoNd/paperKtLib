@@ -10,8 +10,8 @@ data class LocationSection(
     val x: Double,
     val y: Double,
     val z: Double,
-    val yaw: Float,
-    val pitch: Float
+    val yaw: Float = 0.0F,
+    val pitch: Float = 0.0F
 ) {
     fun toLocation(): Location = Location(Bukkit.getWorld(world), x, y, z, yaw, pitch)
 }

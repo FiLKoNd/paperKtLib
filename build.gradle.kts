@@ -13,7 +13,7 @@ subprojects {
     apply(plugin = "maven-publish")
 
     group = "com.filkond"
-    version = "1.1.1"
+    version = "1.1.3"
 
     repositories {
         mavenCentral()
@@ -24,6 +24,7 @@ subprojects {
 
     dependencies {
         compileOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+        compileOnly(kotlin("reflect"))
         compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     }
 
@@ -57,11 +58,6 @@ subprojects {
         delete("$rootDir/target")
     }
 
-    java {
-        withSourcesJar()
-        withJavadocJar()
-    }
-
     kotlin {
         jvmToolchain(17)
     }
@@ -83,9 +79,9 @@ subprojects {
         }
         publications {
             create<MavenPublication>(project.name) {
+                from(components["kotlin"])
                 artifact(tasks["sourcesJar"])
                 artifact(tasks["javadocJar"])
-                artifact(tasks.shadowJar)
                 artifactId = project.name
                 groupId = project.group.toString()
                 version = project.version.toString()

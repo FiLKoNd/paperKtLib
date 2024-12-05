@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+    implementation("com.charleskorn.kaml:kaml:0.66.0")
     implementation(kotlin("reflect"))
 
     implementation(project(":paperktlib-towny"))

@@ -4,5 +4,6 @@ plugins {
 
 dependencies {
     compileOnly(project(":paperktlib-adventure"))
+    compileOnly("com.charleskorn.kaml:kaml:0.66.0")
     compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 }
