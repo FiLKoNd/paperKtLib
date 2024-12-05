@@ -11,9 +11,9 @@ import kotlin.reflect.full.createInstance
 
 abstract class ConfigManager(
     val folder: File,
-    private val formatter: StringFormat
+    protected val formatter: StringFormat
 ) {
-    val configs: MutableMap<File, Config> = mutableMapOf()
+    protected val configs: MutableMap<File, Config> = mutableMapOf()
 
     inline fun <reified T : Config> config(fileName: String): T {
         val file = File(folder, fileName)
@@ -26,8 +26,12 @@ abstract class ConfigManager(
         return config
     }
 
-    inline fun <reified T : Config> T.reload() {
+    private inline fun <reified T : Config> T.reload() {
         configs.values.first { T::class == it::class }.update(this)
+    }
+
+    fun reload(config: Config) {
+        config.reload()
     }
 
     fun reload(fileName: String) {
