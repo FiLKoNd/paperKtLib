@@ -26,6 +26,7 @@ abstract class ConfigManager(
         return config
     }
 
+    @JvmName("reloadConfig")
     private inline fun <reified T : Config> T.reload() {
         configs.values.first { T::class == it::class }.update(this)
     }
