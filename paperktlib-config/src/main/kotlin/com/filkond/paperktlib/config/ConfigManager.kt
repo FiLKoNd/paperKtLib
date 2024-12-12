@@ -7,7 +7,7 @@ import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
 import java.io.File
 import kotlin.reflect.KClass
-import kotlin.reflect.full.createInstance
+import kotlin.reflect.full.primaryConstructor
 
 abstract class ConfigManager(
     val folder: File,
@@ -47,7 +47,7 @@ abstract class ConfigManager(
     private inline fun <reified T : Config> T.update(file: File) = loadConfig(file, T::class).update(this)
     private fun <T : Config> loadConfig(file: File, clazz: KClass<T>): T =
         loadConfigFromFileOrDefault(formatter, file, clazz) {
-            clazz.createInstance()
+            clazz.primaryConstructor!!.call()
         }
 }
 class JsonConfigManager(folder: File, json: Json = Json) : ConfigManager(folder, json)
