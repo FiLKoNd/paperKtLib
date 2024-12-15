@@ -1,4 +1,5 @@
 @file:OptIn(InternalSerializationApi::class)
+
 package com.filkond.paperktlib.config.ext
 
 import com.filkond.paperktlib.config.Config
@@ -8,10 +9,12 @@ import kotlinx.serialization.serializer
 import org.apache.logging.log4j.LogManager
 import java.io.File
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty
 
 private val logger = LogManager.getLogger()
+private val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
 fun <T : Config> T.update(newObject: T) {
     val clazz = this::class
@@ -20,19 +23,34 @@ fun <T : Config> T.update(newObject: T) {
     }
 }
 
-fun <T : Config> loadConfigFromFileOrDefault(formatter: StringFormat, file: File, clazz: KClass<T>, getDefault: () -> T): T {
+fun <T : Config> loadConfigFromFileOrDefault(
+    formatter: StringFormat,
+    file: File,
+    clazz: KClass<T>,
+    getDefault: () -> T
+): T {
     return try {
         formatter.decodeFromString(clazz.serializer(), file.readText())
     } catch (e: Exception) {
         if (file.exists()) {
-            file.copyTo(File(file.parentFile, "${file.nameWithoutExtension}-backup-${LocalDate.now()}-.${file.extension}"))
+            file.copyTo(
+                File(
+                    file.parentFile,
+                    "${file.nameWithoutExtension}-backup-${LocalDate.now().format(timeFormat)}-.${file.extension}"
+                )
+            )
             logger.warn("Failed to load config ${file.name}, using default: $e")
         }
         writeAndGetDefaultConfig(formatter, file, getDefault, clazz)
     }
 }
 
-private fun <T : Config> writeAndGetDefaultConfig(formatter: StringFormat, file: File, getDefault: () -> T, clazz: KClass<T>): T {
+private fun <T : Config> writeAndGetDefaultConfig(
+    formatter: StringFormat,
+    file: File,
+    getDefault: () -> T,
+    clazz: KClass<T>
+): T {
     file.parentFile.mkdirs()
     file.createNewFile()
     return getDefault().also {
