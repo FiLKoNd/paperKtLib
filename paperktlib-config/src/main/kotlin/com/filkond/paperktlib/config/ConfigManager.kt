@@ -7,7 +7,7 @@ import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
 import java.io.File
 import kotlin.reflect.KClass
-import kotlin.reflect.full.primaryConstructor
+import kotlin.reflect.full.createInstance
 
 abstract class ConfigManager(
     val folder: File,
@@ -41,13 +41,13 @@ abstract class ConfigManager(
     }
 
     fun reloadAll() {
-        configs.forEach { it.value.update(it.key) }
+        configs.forEach { it.value.reload() }
     }
 
     private inline fun <reified T : Config> T.update(file: File) = loadConfig(file, T::class).update(this)
     private fun <T : Config> loadConfig(file: File, clazz: KClass<T>): T =
         loadConfigFromFileOrDefault(formatter, file, clazz) {
-            clazz.primaryConstructor!!.call()
+            clazz.createInstance()
         }
 }
 class JsonConfigManager(folder: File, json: Json = Json) : ConfigManager(folder, json)
