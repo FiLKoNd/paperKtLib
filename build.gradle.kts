@@ -26,6 +26,13 @@ subprojects {
         compileOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
         compileOnly(kotlin("reflect"))
         compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+
+        testImplementation(platform("org.junit:junit-bom:5.11.3"))
+        testImplementation("org.junit.jupiter:junit-jupiter")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+        testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+        testImplementation(kotlin("reflect"))
+        testImplementation("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     }
 
     tasks.build {
