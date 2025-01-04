@@ -2,7 +2,6 @@ package com.filkond.paperktlib.config
 
 import com.charleskorn.kaml.Yaml
 import com.filkond.paperktlib.config.ext.loadConfigOrDefault
-import com.filkond.paperktlib.config.ext.update
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
