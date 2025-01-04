@@ -2,6 +2,7 @@ package com.filkond.paperktlib.config
 
 import com.charleskorn.kaml.Yaml
 import com.filkond.paperktlib.config.ext.loadConfigOrDefault
+import com.filkond.paperktlib.config.ext.update
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -52,7 +53,9 @@ abstract class ConfigManager(
      * Load a config from file and update its values
      * @param clazz A config class
      */
-    fun reload(clazz: KClass<out Config>) = getConfigByClass(clazz).let { (file, config) -> configs[file] = config }
+    fun reload(clazz: KClass<out Config>) = getConfigByClass(clazz).let { (file, config) ->
+        config.update(loadConfigOrDefault(file, config::class))
+    }
 
     /**
      * Unload a config from config manager
