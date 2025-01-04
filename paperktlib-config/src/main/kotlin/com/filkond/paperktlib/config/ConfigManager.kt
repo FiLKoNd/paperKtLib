@@ -4,6 +4,7 @@ import com.charleskorn.kaml.Yaml
 import com.filkond.paperktlib.config.ext.loadConfigOrDefault
 import com.filkond.paperktlib.config.ext.update
 import kotlinx.serialization.StringFormat
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.apache.logging.log4j.LogManager
 import java.io.File
@@ -52,20 +53,14 @@ abstract class ConfigManager(
      * Load a config from file and update its values
      * @param clazz A config class
      */
-    fun reload(clazz: KClass<out Config>) {
-        configs.asSequence().firstOrNull { it.value::class == clazz }?.also {
-            it.value.update(loadConfigOrDefault(it.key, it.value::class))
-        } ?: logger.warn("Config ${clazz.simpleName} not found")
-    }
+    fun reload(clazz: KClass<out Config>) = getConfigByClass(clazz).let { (file, config) -> configs[file] = config }
 
     /**
      * Unload a config from config manager
      * @param clazz A config class
      */
     fun unload(clazz: KClass<out Config>) {
-        configs.entries.find { it.value::class == clazz }?.key?.let {
-            configs.remove(it)
-        }
+        configs.remove(getConfigByClass(clazz).first)
     }
 
     /**
@@ -82,6 +77,30 @@ abstract class ConfigManager(
         configs.forEach { (_, config) ->
             reload(config::class)
         }
+    }
+
+    /**
+     * p
+     * @param clazz A config class
+     * @return Pair<File, Config>
+     */
+    fun getConfigByClass(clazz: KClass<out Config>): Pair<File, Config> {
+        return configs.asSequence().firstOrNull { it.value::class == clazz }?.let {
+            return it.toPair()
+        } ?: throw IllegalArgumentException("Config ${clazz.simpleName} not found")
+    }
+
+    /**
+     * Save a config
+     * @param clazz A config class
+     */
+    fun save(clazz: KClass<out Config>) {
+        val (file, config) = getConfigByClass(clazz)
+        file.writeText(formatter.encodeToString(config))
+    }
+
+    fun saveAll() {
+        configs.forEach { (file, config) -> file.writeText(formatter.encodeToString(config)) }
     }
 
     private fun <T : Config> loadConfigOrDefault(file: File, clazz: KClass<T>): T =
