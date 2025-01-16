@@ -3,14 +3,16 @@ package com.filkond.paperktlib.config
 import com.charleskorn.kaml.Yaml
 import com.filkond.paperktlib.config.ext.loadConfigOrDefault
 import com.filkond.paperktlib.config.ext.update
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.StringFormat
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import org.apache.logging.log4j.LogManager
 import java.io.File
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
+@OptIn(InternalSerializationApi::class)
 abstract class ConfigManager(
     val folder: File,
     private val formatter: StringFormat
@@ -86,23 +88,40 @@ abstract class ConfigManager(
      * @param clazz A config class
      * @return Pair<File, Config>
      */
-    fun getConfigByClass(clazz: KClass<out Config>): Pair<File, Config> {
+    @Suppress("UNCHECKED_CAST")
+    fun <T : Config> getConfigByClass(clazz: KClass<T>): Pair<File, T> {
         return configs.asSequence().firstOrNull { it.value::class == clazz }?.let {
-            return it.toPair()
+            return it.key to it.value as T
         } ?: throw IllegalArgumentException("Config ${clazz.simpleName} not found")
+    }
+
+    /**
+     * Save a config
+     * @param file A file which linked to config
+     * @param clazz A config class
+     * @param config A config object
+     */
+    private fun <T : Config> save(file: File, clazz: KClass<T>, config: T) {
+        file.writeText(formatter.encodeToString(clazz.serializer(), config))
     }
 
     /**
      * Save a config
      * @param clazz A config class
      */
-    fun save(clazz: KClass<out Config>) {
+    fun <T : Config> save(clazz: KClass<T>) {
         val (file, config) = getConfigByClass(clazz)
-        file.writeText(formatter.encodeToString(config))
+        save(file, clazz, config)
+        file.writeText(formatter.encodeToString(clazz.serializer(), config))
     }
 
+    /**
+     * Save all stored configs
+     */
     fun saveAll() {
-        configs.forEach { (file, config) -> file.writeText(formatter.encodeToString(config)) }
+        configs.forEach { (_, config) ->
+            save(config::class)
+        }
     }
 
     private fun <T : Config> loadConfigOrDefault(file: File, clazz: KClass<T>): T =

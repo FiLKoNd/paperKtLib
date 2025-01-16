@@ -19,6 +19,9 @@ class ConfigManagerTest {
         inputFile.writeText("""{"string":"hello world!"}""")
         jsonConfigManager.reload(TestConfig::class)
         assert(config.string == "hello world!")
+        config.string = "no"
+        jsonConfigManager.saveAll()
+        assert(inputFile.readText() == """{"string":"no"}""")
         jsonConfigManager.unloadAll()
     }
 
