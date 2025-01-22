@@ -19,3 +19,4 @@ fun Component.serialize(isLegacy: Boolean = false): String = let { if (isLegacy)
 fun Collection<Component>.serialize(isLegacy: Boolean = false): Collection<String> = map { it.serialize(isLegacy) }
 
 infix fun String.resolver(value: Any): TagResolver = Placeholder.parsed(this, value.toString())
+infix fun String.resolver(value: Component): TagResolver = Placeholder.component(this, value)
