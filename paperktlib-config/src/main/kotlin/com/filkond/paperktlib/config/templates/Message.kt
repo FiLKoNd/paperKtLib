@@ -9,10 +9,13 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import net.kyori.adventure.title.Title
 
 @Serializable
-sealed class Message {
+sealed class Message : Sendable{
     abstract val legacy: Boolean
+}
 
-    abstract fun send(audience: Audience, vararg resolvers: TagResolver)
+@Serializable
+sealed interface Sendable {
+    fun send(audience: Audience, vararg resolvers: TagResolver)
 }
 
 @Serializable
@@ -57,5 +60,17 @@ data class TitleMessage(
                 Tick.of(fadeOut)
             )
         )
+    }
+}
+
+@Serializable
+@SerialName("multimessage")
+data class MultiMessage(
+    val list: List<Message>
+) : Sendable {
+    override fun send(audience: Audience, vararg resolvers: TagResolver) {
+        list.forEach {
+            it.send(audience)
+        }
     }
 }
