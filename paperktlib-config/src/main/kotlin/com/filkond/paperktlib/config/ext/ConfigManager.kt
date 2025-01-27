@@ -11,8 +11,8 @@ import kotlinx.serialization.json.Json
 import java.io.File
 import kotlin.reflect.KClass
 
-fun <T : Config> SimpleConfigManager.load(configFileName: String, clazz: KClass<T>): T =
-    load(File(configFolder, configFileName), clazz)
+fun <T : Config> SimpleConfigManager.load(configFileName: String, clazz: KClass<T>, instance: T? = null): T =
+    load(File(configFolder, configFileName), clazz, instance)
 
 fun ConfigManager.reloadAll() {
     configsElements.forEach {
