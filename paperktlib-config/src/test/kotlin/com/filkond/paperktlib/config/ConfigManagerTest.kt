@@ -13,6 +13,7 @@ import java.io.File
 class ConfigManagerTest {
     private lateinit var jsonConfigManager: ConfigManager
     private val inputFile = File(configFolder, "input.json").apply(File::createNewFile)
+    private val inputFile2 = File(configFolder, "input2.json").apply(File::createNewFile)
 
     @BeforeEach
     fun beforeTest() {
@@ -46,6 +47,11 @@ class ConfigManagerTest {
         jsonConfigManager.reload(TestConfig::class)
 
         assert(TestConfig.string == "hello world!")
+
+        jsonConfigManager.load(inputFile, TestConfig2::class, TestConfig2.Companion)
+        inputFile2.writeText("""{"test":"yes"}""")
+        jsonConfigManager.reload(TestConfig2::class)
+        assert(TestConfig2.test == "yes")
     }
 
     @Test
@@ -55,7 +61,6 @@ class ConfigManagerTest {
 
         config.string = "no"
         jsonConfigManager.saveAll()
-        println(inputFile.readText())
         assert(inputFile.readText() == """{"string":"no"}""")
 
         jsonConfigManager.unloadAll()

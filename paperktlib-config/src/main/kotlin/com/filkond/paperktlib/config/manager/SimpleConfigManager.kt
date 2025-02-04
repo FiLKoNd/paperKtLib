@@ -21,7 +21,7 @@ class SimpleConfigManager(
         get() = configs.toSet()
 
     override fun <T : Config> load(configFile: File, clazz: KClass<T>, instance: T?): T {
-        if (configs.map { it.first == clazz }.any()) {
+        if (configs.map { it.first == clazz }.contains(true)) {
             throw IllegalArgumentException("This config is already loaded.")
         }
 
