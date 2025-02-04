@@ -13,7 +13,7 @@ subprojects {
     apply(plugin = "maven-publish")
 
     group = "com.filkond"
-    version = "1.2.5"
+    version = "1.2.6"
 
     repositories {
         mavenCentral()
