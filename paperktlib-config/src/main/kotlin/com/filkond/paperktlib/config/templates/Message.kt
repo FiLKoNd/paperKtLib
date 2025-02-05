@@ -70,7 +70,7 @@ data class MultiMessage(
 ) : Sendable {
     override fun send(audience: Audience, vararg resolvers: TagResolver) {
         list.forEach {
-            it.send(audience)
+            it.send(audience, *resolvers)
         }
     }
 }
