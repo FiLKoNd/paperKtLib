@@ -25,7 +25,8 @@ class SimpleConfigManager(
             throw IllegalArgumentException("This config is already loaded.")
         }
 
-        val configInstance = instance ?: loadConfigOrDefault(formatter, configFile, clazz, clazz::createInstance)
+        val loadedConfig = loadConfigOrDefault(formatter, configFile, clazz, clazz::createInstance)
+        val configInstance = instance?.apply { update(loadedConfig) } ?: loadedConfig
         val element = Triple(clazz, configInstance, configFile)
 
         configs.add(element)
