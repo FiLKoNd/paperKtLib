@@ -16,7 +16,7 @@ import kotlin.reflect.full.companionObjectInstance
 /**
  * Loads the config and link it to the [instance]
  * @receiver SimpleConfigManager
- * @param configFileName String
+ * @param configFileName File name
  * @param clazz Config class
  * @param instance Instance to link
  * @return Instance of the loaded config
@@ -25,12 +25,21 @@ fun <T : Config> SimpleConfigManager.load(configFileName: String, clazz: KClass<
     load(File(configFolder, configFileName), clazz, instance)
 
 /**
- * Loads the config and link it to the companion object
+ * Loads the config
  * @receiver SimpleConfigManager
- * @param configFileName String
+ * @param configFileName File name
  * @return Instance of the loaded config
  */
 inline fun <reified T : Config> SimpleConfigManager.load(configFileName: String): T =
+    load(configFileName, T::class, null)
+
+/**
+ * Loads the config and link it to the companion object
+ * @receiver SimpleConfigManager
+ * @param configFileName File name
+ * @return Instance of the loaded config
+ */
+inline fun <reified T : Config> SimpleConfigManager.loadCompanion(configFileName: String): T =
     load(configFileName, T::class, T::class.companionObjectInstance as T)
 
 fun ConfigManager.reloadAll() {
