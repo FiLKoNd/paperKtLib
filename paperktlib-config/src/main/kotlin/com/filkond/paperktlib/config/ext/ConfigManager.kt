@@ -7,12 +7,31 @@ import com.charleskorn.kaml.YamlConfiguration
 import com.filkond.paperktlib.config.Config
 import com.filkond.paperktlib.config.manager.ConfigManager
 import com.filkond.paperktlib.config.manager.SimpleConfigManager
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import java.io.File
 import kotlin.reflect.KClass
+import kotlin.reflect.full.companionObjectInstance
 
+/**
+ * Loads the config and link it to the [instance]
+ * @receiver SimpleConfigManager
+ * @param configFileName String
+ * @param clazz Config class
+ * @param instance Instance to link
+ * @return Instance of the loaded config
+ */
 fun <T : Config> SimpleConfigManager.load(configFileName: String, clazz: KClass<T>, instance: T? = null): T =
     load(File(configFolder, configFileName), clazz, instance)
+
+/**
+ * Loads the config and link it to the companion object
+ * @receiver SimpleConfigManager
+ * @param configFileName String
+ * @return Instance of the loaded config
+ */
+inline fun <reified T : Config> SimpleConfigManager.load(configFileName: String): T =
+    load(configFileName, T::class, T::class.companionObjectInstance as T)
 
 fun ConfigManager.reloadAll() {
     configsElements.forEach {
@@ -37,8 +56,11 @@ fun <T : Config> ConfigManager.getConfigElementByClass(clazz: KClass<T>): Config
         it.first == clazz
     } ?: throw IllegalArgumentException("Config with class $clazz is not loaded.")
 
+@OptIn(ExperimentalSerializationApi::class)
 fun JsonConfigManager(configFolder: File) = SimpleConfigManager(configFolder, Json {
     encodeDefaults = true
+    allowComments = true
+    ignoreUnknownKeys = true
     prettyPrint = true
 })
 
