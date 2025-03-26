@@ -11,6 +11,6 @@ include(
     "paperktlib-plugin",
     "paperktlib-towny",
     "paperktlib-adventure",
-    "paperktlib-config"
+    "paperktlib-config",
+    "paperktlib-paper"
 )
-include("paperktlib-paper")
