@@ -9,12 +9,12 @@ repositories {
 }
 ```
 
-
 ```kotlin
+val paperKtLibVersion = "1.3.4"
 dependencies {
-    compileOnly("com.filkond:paperktlib-adventure:1.0.1")
-    compileOnly("com.filkond:paperktlib-config:1.0.1")
-    compileOnly("com.filkond:paperktlib-paper:1.0.1")
-    compileOnly("com.filkond:paperktlib-towny:1.0.1")
+    compileOnly("com.filkond:paperktlib-adventure:$paperKtLibVersion")
+    compileOnly("com.filkond:paperktlib-config:$paperKtLibVersion")
+    compileOnly("com.filkond:paperktlib-paper:$paperKtLibVersion")
+    compileOnly("com.filkond:paperktlib-towny:$paperKtLibVersion")
 }
 ```
