@@ -5,10 +5,14 @@ package com.filkond.paperktlib.config.ext
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import com.filkond.paperktlib.config.Config
+import com.filkond.paperktlib.config.ReloadableConfig
 import com.filkond.paperktlib.config.manager.ConfigManager
 import com.filkond.paperktlib.config.manager.SimpleConfigManager
+import com.filkond.paperktlib.config.serializers.UUIDSerializer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.contextual
 import java.io.File
 import kotlin.reflect.KClass
 import kotlin.reflect.full.companionObjectInstance
@@ -21,7 +25,7 @@ import kotlin.reflect.full.companionObjectInstance
  * @param instance Instance to link
  * @return Instance of the loaded config
  */
-fun <T : Config> SimpleConfigManager.load(configFileName: String, clazz: KClass<T>, instance: T? = null): T =
+fun <C : Config> SimpleConfigManager.load(configFileName: String, clazz: KClass<C>, instance: C? = null): C =
     load(File(configFolder, configFileName), clazz, instance)
 
 /**
@@ -39,31 +43,36 @@ inline fun <reified T : Config> SimpleConfigManager.load(configFileName: String)
  * @param configFileName File name
  * @return Instance of the loaded config
  */
-inline fun <reified T : Config> SimpleConfigManager.loadCompanion(configFileName: String): T =
-    load(configFileName, T::class, T::class.companionObjectInstance as T)
+inline fun <reified C : Config> SimpleConfigManager.loadCompanion(configFileName: String): C =
+    load(configFileName, C::class, C::class.companionObjectInstance as C)
+
+val ConfigManager.reloadableConfigs
+    get() = configsElements.filterIsInstance<ReloadableConfig>()
 
 fun ConfigManager.reloadAll() {
-    configsElements.forEach {
-        reload(it.first)
+    reloadableConfigs.forEach {
+        reload(it::class)
     }
 }
 
 fun ConfigManager.saveAll() {
     configsElements.forEach {
-        save(it.first)
+        save(it.clazz)
     }
 }
 
 fun ConfigManager.unloadAll() {
     configsElements.forEach {
-        unload(it.first)
+        unload(it.clazz)
     }
 }
 
-fun <T : Config> ConfigManager.getConfigElementByClass(clazz: KClass<T>): ConfigElement =
-    configsElements.firstOrNull {
-        it.first == clazz
-    } ?: throw IllegalArgumentException("Config with class $clazz is not loaded.")
+fun <C : Config> ConfigManager.getConfigElementByClass(clazz: KClass<C>): ConfigElement<C> =
+    configsElements
+        .filterIsInstance<ConfigElement<C>>()
+        .firstOrNull {
+            it.clazz == clazz
+        } ?: throw IllegalArgumentException("Config with class $clazz is not loaded.")
 
 @OptIn(ExperimentalSerializationApi::class)
 fun JsonConfigManager(configFolder: File) = SimpleConfigManager(configFolder, Json {
@@ -71,12 +80,22 @@ fun JsonConfigManager(configFolder: File) = SimpleConfigManager(configFolder, Js
     allowComments = true
     ignoreUnknownKeys = true
     prettyPrint = true
+    serializersModule = serializerModule()
 })
 
 fun YamlConfigManager(configFolder: File) = SimpleConfigManager(
     configFolder, Yaml(
-        configuration = YamlConfiguration(encodeDefaults = true)
+        configuration = YamlConfiguration(encodeDefaults = true),
+        serializersModule = serializerModule()
     )
 )
 
-typealias ConfigElement = Triple<KClass<out Config>, Config, File>
+private fun serializerModule(): SerializersModule = SerializersModule {
+    contextual(UUIDSerializer)
+}
+
+data class ConfigElement<out C : Config>(
+    val clazz: KClass<out C>,
+    val config: C,
+    val file: File
+)

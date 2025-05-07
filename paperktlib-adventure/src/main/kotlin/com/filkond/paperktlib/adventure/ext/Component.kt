@@ -11,7 +11,10 @@ private val legacySerializer = LegacyComponentSerializer.legacyAmpersand()
 
 
 fun String.deserialize(vararg resolvers: TagResolver, isLegacy: Boolean = false): Component =
-    if (isLegacy) mmSerializer.deserialize(mmSerializer.serialize(legacySerializer.deserialize(this)), *resolvers) // <-- это пиздец
+    if (isLegacy) mmSerializer.deserialize(
+        mmSerializer.serialize(legacySerializer.deserialize(this)),
+        *resolvers
+    ) // <-- это пиздец
     else mmSerializer.deserialize(this, *resolvers)
 
 fun <T : Collection<String>> T.deserialize(vararg resolvers: TagResolver, isLegacy: Boolean = false): List<Component> =

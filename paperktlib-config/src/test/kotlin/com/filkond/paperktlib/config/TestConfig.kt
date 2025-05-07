@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 open class TestConfig(
     var string: String = "вtest"
-) : Config {
+) : ReloadableConfig {
     companion object : TestConfig()
 }

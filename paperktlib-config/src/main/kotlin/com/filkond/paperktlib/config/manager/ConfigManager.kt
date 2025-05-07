@@ -1,6 +1,7 @@
 package com.filkond.paperktlib.config.manager
 
 import com.filkond.paperktlib.config.Config
+import com.filkond.paperktlib.config.ReloadableConfig
 import com.filkond.paperktlib.config.ext.ConfigElement
 import java.io.File
 import kotlin.reflect.KClass
@@ -9,7 +10,7 @@ interface ConfigManager {
     /**
      * All stored config elements
      */
-    val configsElements: Set<ConfigElement>
+    val configsElements: Set<ConfigElement<Config>>
 
     /**
      * Register a config and add it to [configsElements]
@@ -25,7 +26,7 @@ interface ConfigManager {
      * Reloads the config that corresponds to the [clazz] in the elements.
      * @param clazz A config class
      */
-    fun <T : Config> reload(clazz: KClass<T>)
+    fun <T : ReloadableConfig> reload(clazz: KClass<T>)
 
     /**
      * Update the contents of the config file, taking into account the content of the config instance

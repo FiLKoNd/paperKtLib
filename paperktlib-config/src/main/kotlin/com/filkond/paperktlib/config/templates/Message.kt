@@ -9,7 +9,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import net.kyori.adventure.title.Title
 
 @Serializable
-sealed class Message : Sendable{
+sealed class Message : Sendable {
     abstract val legacy: Boolean
 }
 

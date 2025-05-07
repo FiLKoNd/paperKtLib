@@ -13,7 +13,7 @@ class SimpleDynamicBossBar(
     var shouldDisplay: () -> Boolean,
     var color: () -> BossBar.Color,
     var overlay: () -> BossBar.Overlay
-) : DynamicBossBar{
+) : DynamicBossBar {
     private constructor(builder: Builder) : this(
         uuid = UUID.randomUUID(),
         title = builder.title,
@@ -36,9 +36,9 @@ class SimpleDynamicBossBar(
         bossBar.overlay(overlay())
         bossBar.progress(progress().coerceIn(0.0f, 1.0f))
 
-        bossBar.viewers().map {
+        bossBar.viewers().mapNotNull {
             it as? Audience
-        }.filterNotNull().forEach { if (shouldDisplay()) show(it) else hide(it) }
+        }.forEach { if (shouldDisplay()) show(it) else hide(it) }
     }
 
     override fun equals(other: Any?): Boolean = other is SimpleDynamicBossBar && other.uuid == uuid
