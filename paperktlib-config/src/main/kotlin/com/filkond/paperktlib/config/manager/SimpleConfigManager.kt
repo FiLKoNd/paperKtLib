@@ -53,7 +53,7 @@ class SimpleConfigManager(
             @Suppress("UNCHECKED_CAST")
             formatter.encodeToString(
                 clazz.serializer(),
-                config as T
+                config
             )
         )
     }
