@@ -42,8 +42,8 @@ fun Inventory.removeIfContains(type: Material, amount: Int): Boolean = containsA
     if (it) removeForce(type, amount)
 }
 
-fun Inventory.containsAny(type: Material, amount: Int): Boolean = all(type).values.map { it.amount }.sum() >= amount
-fun Inventory.containsAny(item: ItemStack): Boolean = all(item).values.map { it.amount }.sum() >= item.amount
+fun Inventory.containsAny(type: Material, amount: Int): Boolean = all(type).values.sumOf { it.amount } >= amount
+fun Inventory.containsAny(item: ItemStack): Boolean = all(item).values.sumOf { it.amount } >= item.amount
 
 fun Inventory.toBase64(): String {
     val outputStream = ByteArrayOutputStream()
