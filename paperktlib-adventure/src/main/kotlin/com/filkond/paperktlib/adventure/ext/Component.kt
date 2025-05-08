@@ -14,7 +14,7 @@ fun String.deserialize(vararg resolvers: TagResolver, isLegacy: Boolean = false)
     if (isLegacy) mmSerializer.deserialize(
         mmSerializer.serialize(legacySerializer.deserialize(this)),
         *resolvers
-    ) // <-- это пиздец
+    ) // это пиздец
     else mmSerializer.deserialize(this, *resolvers)
 
 fun <T : Collection<String>> T.deserialize(vararg resolvers: TagResolver, isLegacy: Boolean = false): List<Component> =
@@ -25,5 +25,5 @@ fun Component.serialize(isLegacy: Boolean = false): String =
 
 fun Collection<Component>.serialize(isLegacy: Boolean = false): Collection<String> = map { it.serialize(isLegacy) }
 
-infix fun String.resolver(value: Any): TagResolver = Placeholder.parsed(this, value.toString())
-infix fun String.resolver(value: Component): TagResolver = Placeholder.component(this, value)
+infix fun String.resolver(value: Any): TagResolver =
+    (value as? Component)?.let { Placeholder.component(this, value) } ?: Placeholder.parsed(this, value.toString())
