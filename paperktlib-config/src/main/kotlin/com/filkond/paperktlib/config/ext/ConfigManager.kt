@@ -69,12 +69,12 @@ fun ConfigManager.unloadAll() {
 }
 
 @Suppress("UNCHECKED_CAST")
-fun <C : Config> ConfigManager.getConfigElementByClass(clazz: KClass<C>): ConfigElement<C>? =
+fun <C : Config> ConfigManager.getConfigElementByClass(clazz: KClass<C>): ConfigElement<C> =
     configsElements
         .filter { it.clazz == clazz }
         .firstOrNull {
             it.clazz == clazz
-        } as? ConfigElement<C>
+        } as? ConfigElement<C> ?: throw IllegalArgumentException("Config with class $clazz is not loaded.")
 
 @OptIn(ExperimentalSerializationApi::class)
 fun JsonConfigManager(configFolder: File) = SimpleConfigManager(configFolder, Json {
