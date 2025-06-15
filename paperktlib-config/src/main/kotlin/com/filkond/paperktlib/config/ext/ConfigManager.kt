@@ -46,12 +46,13 @@ inline fun <reified T : Config> SimpleConfigManager.load(configFileName: String)
 inline fun <reified C : Config> SimpleConfigManager.loadCompanion(configFileName: String): C =
     load(configFileName, C::class, C::class.companionObjectInstance as C)
 
+@Suppress("UNCHECKED_CAST")
 val ConfigManager.reloadableConfigs
-    get() = configsElements.filterIsInstance<ReloadableConfig>()
+    get() = configsElements.filter { it.config is ReloadableConfig } as Set<ConfigElement<ReloadableConfig>>
 
 fun ConfigManager.reloadAll() {
     reloadableConfigs.forEach {
-        reload(it::class)
+        reload(it.clazz)
     }
 }
 
@@ -67,12 +68,13 @@ fun ConfigManager.unloadAll() {
     }
 }
 
-fun <C : Config> ConfigManager.getConfigElementByClass(clazz: KClass<C>): ConfigElement<C> =
+@Suppress("UNCHECKED_CAST")
+fun <C : Config> ConfigManager.getConfigElementByClass(clazz: KClass<C>): ConfigElement<C>? =
     configsElements
-        .filterIsInstance<ConfigElement<C>>()
+        .filter { it.clazz == clazz }
         .firstOrNull {
             it.clazz == clazz
-        } ?: throw IllegalArgumentException("Config with class $clazz is not loaded.")
+        } as? ConfigElement<C>
 
 @OptIn(ExperimentalSerializationApi::class)
 fun JsonConfigManager(configFolder: File) = SimpleConfigManager(configFolder, Json {
@@ -80,17 +82,17 @@ fun JsonConfigManager(configFolder: File) = SimpleConfigManager(configFolder, Js
     allowComments = true
     ignoreUnknownKeys = true
     prettyPrint = true
-    serializersModule = serializerModule()
+    serializersModule = paperKtLibSerializerModule()
 })
 
 fun YamlConfigManager(configFolder: File) = SimpleConfigManager(
     configFolder, Yaml(
         configuration = YamlConfiguration(encodeDefaults = true),
-        serializersModule = serializerModule()
+        serializersModule = paperKtLibSerializerModule()
     )
 )
 
-private fun serializerModule(): SerializersModule = SerializersModule {
+fun paperKtLibSerializerModule(): SerializersModule = SerializersModule {
     contextual(UUIDSerializer)
 }
 
