@@ -48,7 +48,7 @@ inline fun <reified C : Config> SimpleConfigManager.loadCompanion(configFileName
 
 @Suppress("UNCHECKED_CAST")
 val ConfigManager.reloadableConfigs
-    get() = configsElements.filter { it.config is ReloadableConfig } as Set<ConfigElement<ReloadableConfig>>
+    get() = configsElements.filter { it.config is ReloadableConfig }.toSet() as Set<ConfigElement<ReloadableConfig>>
 
 fun ConfigManager.reloadAll() {
     reloadableConfigs.forEach {
