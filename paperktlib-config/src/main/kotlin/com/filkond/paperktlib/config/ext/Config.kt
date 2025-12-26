@@ -32,21 +32,23 @@ fun <T : Config> loadConfigOrDefault(
     return try {
         formatter.decodeFromString(clazz.serializer(), file.readText())
     } catch (e: Exception) {
-        createBackup(file, e)
+        val backupFile = createBackup(file)
+        logger.error("Failed to load config ${file.name}, using default: $e")
+        logger.info("Backup created at: ${backupFile.path}")
         writeAndGetDefaultConfig(formatter, file, getDefault, clazz)
     }
 }
 
-private fun createBackup(file: File, e: Exception) {
+private fun createBackup(file: File): File {
     if (file.exists()) {
-        file.copyTo(
-            File(
-                file.parentFile,
-                "${file.nameWithoutExtension}-backup-${LocalDateTime.now().format(timeFormat)}-.${file.extension}"
-            )
+        val timestamp = LocalDateTime.now().format(timeFormat)
+        val backupFile = File(
+            file.parentFile,
+            "${file.nameWithoutExtension}-backup-$timestamp-.${file.extension}"
         )
-        logger.warn("Failed to load config ${file.name}, using default: $e")
+        file.copyTo(backupFile)
     }
+    throw IllegalArgumentException("Failed to create backup. File $file is not exist.")
 }
 
 private fun <T : Config> writeAndGetDefaultConfig(
