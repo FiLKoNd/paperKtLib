@@ -1,5 +1,8 @@
 name: GraalVM build
-on: [ push, pull_request ]
+on:
+  push:
+    paths:
+      - 'gradle.properties'
 jobs:
   build:
     permissions: write-all
