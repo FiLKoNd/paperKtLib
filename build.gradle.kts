@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "2.0.21"
-    id("com.gradleup.shadow") version "8.3.3"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.shadow)
 }
 
 repositories {
@@ -13,7 +13,6 @@ subprojects {
     apply(plugin = "maven-publish")
 
     group = "com.filkond"
-    version = "1.3.7"
 
     repositories {
         mavenCentral()
@@ -23,16 +22,17 @@ subprojects {
     }
 
     dependencies {
-        compileOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-        compileOnly(kotlin("reflect"))
-        compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+        compileOnly(rootProject.libs.kotlin.stdlib)
+        compileOnly(rootProject.libs.kotlin.reflect)
+        compileOnly(rootProject.libs.paper.api)
 
-        testImplementation(platform("org.junit:junit-bom:5.11.3"))
-        testImplementation("org.junit.jupiter:junit-jupiter")
-        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-        testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-        testImplementation(kotlin("reflect"))
-        testImplementation("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+        testImplementation(platform(rootProject.libs.junit.bom))
+        testImplementation(rootProject.libs.junit.jupiter)
+        testRuntimeOnly(rootProject.libs.junit.platform.launcher)
+
+        testImplementation(rootProject.libs.kotlin.stdlib)
+        testImplementation(rootProject.libs.kotlin.reflect)
+        testImplementation(rootProject.libs.paper.api)
     }
 
     tasks.build {

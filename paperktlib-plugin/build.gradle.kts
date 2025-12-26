@@ -1,12 +1,14 @@
 plugins {
-    kotlin("plugin.serialization") version "2.0.21"
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
-    implementation("com.charleskorn.kaml:kaml:0.66.0")
-    implementation(kotlin("reflect"))
+    getParent()!!.apply {
+        implementation(libs.kotlin.stdlib)
+        implementation(libs.kotlinx.serialization.json)
+        implementation(libs.kaml)
+        implementation(libs.kotlin.reflect)
+    }
 
     implementation(project(":paperktlib-towny"))
     implementation(project(":paperktlib-paper"))

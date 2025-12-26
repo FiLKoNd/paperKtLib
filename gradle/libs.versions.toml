@@ -1,0 +1,25 @@
+[versions]
+kotlin = "2.3.0"
+shadow = "9.3.0"
+paper = "1.20.4-R0.1-SNAPSHOT"
+junit = "6.0.1"
+kaml = "0.104.0"
+kotlinx-serialization = "1.10.0-RC"
+towny = "0.100.3.0"
+
+[libraries]
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
+towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+

@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm")
+    alias(libs.plugins.kotlin.jvm)
 }
 
 repositories {
@@ -9,5 +9,5 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.palmergames.bukkit.towny:towny:0.100.3.0")
+    compileOnly(libs.towny)
 }
