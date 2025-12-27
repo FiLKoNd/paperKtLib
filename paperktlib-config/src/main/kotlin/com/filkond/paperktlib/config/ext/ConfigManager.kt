@@ -5,6 +5,7 @@ package com.filkond.paperktlib.config.ext
 import com.charleskorn.kaml.Yaml
 import com.charleskorn.kaml.YamlConfiguration
 import com.filkond.paperktlib.config.Config
+import com.filkond.paperktlib.config.ConfigElement
 import com.filkond.paperktlib.config.ReloadableConfig
 import com.filkond.paperktlib.config.manager.ConfigManager
 import com.filkond.paperktlib.config.manager.SimpleConfigManager
@@ -50,22 +51,37 @@ inline fun <reified C : Config> SimpleConfigManager.loadCompanion(configFileName
 val ConfigManager.reloadableConfigs
     get() = configsElements.filter { it.config is ReloadableConfig }.toSet() as Set<ConfigElement<ReloadableConfig>>
 
-fun ConfigManager.reloadAll() {
-    reloadableConfigs.forEach {
-        reload(it.clazz)
+fun ConfigManager.reload(configName: String) {
+    val element = reloadableConfigs.firstOrNull {
+        it.file.name == configName
+    } ?: throw IllegalArgumentException("Reloadable config with name $configName is not loaded.")
+
+    reload(element)
+}
+
+fun ConfigManager.reload(clazz: KClass<out ReloadableConfig>) {
+    val element = configsElements.firstOrNull {
+        it.clazz == clazz
+    } ?: throw IllegalArgumentException("Config with class $clazz is not loaded.")
+
+    if (element.config !is ReloadableConfig) {
+        throw IllegalArgumentException("Config with class $clazz is not reloadable.")
     }
+
+    @Suppress("UNCHECKED_CAST")
+    reload(element as ConfigElement<ReloadableConfig>)
+}
+
+fun ConfigManager.reloadAll() {
+    reloadableConfigs.forEach(::reload)
 }
 
 fun ConfigManager.saveAll() {
-    configsElements.forEach {
-        save(it.clazz)
-    }
+    configsElements.forEach(::save)
 }
 
 fun ConfigManager.unloadAll() {
-    configsElements.forEach {
-        unload(it.clazz)
-    }
+    configsElements.forEach(::unload)
 }
 
 @Suppress("UNCHECKED_CAST")
@@ -95,9 +111,3 @@ fun YamlConfigManager(configFolder: File) = SimpleConfigManager(
 fun paperKtLibSerializerModule(): SerializersModule = SerializersModule {
     contextual(UUIDSerializer)
 }
-
-data class ConfigElement<out C : Config>(
-    val clazz: KClass<out C>,
-    val config: C,
-    val file: File
-)

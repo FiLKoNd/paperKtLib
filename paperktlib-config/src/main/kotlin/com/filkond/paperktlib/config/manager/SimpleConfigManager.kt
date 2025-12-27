@@ -1,9 +1,8 @@
 package com.filkond.paperktlib.config.manager
 
 import com.filkond.paperktlib.config.Config
+import com.filkond.paperktlib.config.ConfigElement
 import com.filkond.paperktlib.config.ReloadableConfig
-import com.filkond.paperktlib.config.ext.ConfigElement
-import com.filkond.paperktlib.config.ext.getConfigElementByClass
 import com.filkond.paperktlib.config.ext.loadConfigOrDefault
 import com.filkond.paperktlib.config.ext.update
 import kotlinx.serialization.InternalSerializationApi
@@ -30,15 +29,16 @@ class SimpleConfigManager(
         val configInstance = instance?.apply { update(loadedConfig) } ?: loadedConfig
         val element = ConfigElement(clazz, configInstance, configFile)
 
-        configs.add(element)
+        @Suppress("UNCHECKED_CAST")
+        configs.add(element as ConfigElement<Config>)
         configInstance.onLoad()
 
         return configInstance
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ReloadableConfig> reload(clazz: KClass<T>) {
-        val (_, config, file) = getConfigElementByClass(clazz)
+    override fun <T : ReloadableConfig> reload(element: ConfigElement<T>) {
+        val (clazz, config, file) = element
         val createdInstance = loadConfigOrDefault(formatter, file, clazz, clazz::createInstance)
 
         config.preReload()
@@ -47,20 +47,18 @@ class SimpleConfigManager(
     }
 
     @OptIn(InternalSerializationApi::class)
-    override fun <T : Config> save(clazz: KClass<T>) {
-        val (_, config, file) = getConfigElementByClass(clazz)
-        file.writeText(
+    override fun <T : Config> save(element: ConfigElement<T>) {
+        element.file.writeText(
             @Suppress("UNCHECKED_CAST")
             formatter.encodeToString(
-                clazz.serializer(),
-                config
+                element.clazz.serializer(),
+                element.config
             )
         )
     }
 
-    override fun <T : Config> unload(clazz: KClass<T>) {
-        val element = getConfigElementByClass(clazz)
+    override fun <T : Config> unload(element: ConfigElement<T>) {
         element.config.onUnload()
-        configs.remove(element)
+        configs.remove(element as ConfigElement<*>)
     }
 }

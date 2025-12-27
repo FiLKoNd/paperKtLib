@@ -1,8 +1,8 @@
 package com.filkond.paperktlib.config.manager
 
 import com.filkond.paperktlib.config.Config
+import com.filkond.paperktlib.config.ConfigElement
 import com.filkond.paperktlib.config.ReloadableConfig
-import com.filkond.paperktlib.config.ext.ConfigElement
 import java.io.File
 import kotlin.reflect.KClass
 
@@ -26,19 +26,19 @@ interface ConfigManager {
      * Reloads the config that corresponds to the [clazz] in the elements.
      * @param clazz A config class
      */
-    fun <T : ReloadableConfig> reload(clazz: KClass<T>)
+    fun <T : ReloadableConfig> reload(element: ConfigElement<T>)
 
     /**
      * Update the contents of the config file, taking into account the content of the config instance
      * @throws [IllegalArgumentException] If [configsElements] not contains a [clazz]
      * @param clazz A config class
      */
-    fun <T : Config> save(clazz: KClass<T>)
+    fun <T : Config> save(element: ConfigElement<T>)
 
     /**
      * Removes a config from the [configsElements]
      * @throws [IllegalArgumentException] If [configsElements] not contains a [clazz]
      * @param clazz A config class
      */
-    fun <T : Config> unload(clazz: KClass<T>)
+    fun <T : Config> unload(element: ConfigElement<T>)
 }

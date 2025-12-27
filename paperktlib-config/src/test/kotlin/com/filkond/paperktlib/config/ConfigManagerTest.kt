@@ -1,5 +1,6 @@
 package com.filkond.paperktlib.config
 
+import com.filkond.paperktlib.config.ext.reload
 import com.filkond.paperktlib.config.ext.saveAll
 import com.filkond.paperktlib.config.ext.unloadAll
 import com.filkond.paperktlib.config.manager.ConfigManager
