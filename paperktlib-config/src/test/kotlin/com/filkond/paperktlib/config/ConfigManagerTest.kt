@@ -40,6 +40,8 @@ class ConfigManagerTest {
         assert(config.string == "hello world!")
     }
 
+
+
     @Test
     fun testCompanionReload() {
         inputFile.writeText("""{"string":"hello"}""")

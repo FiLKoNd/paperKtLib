@@ -5,6 +5,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 
 @Serializable
+@Deprecated("Use Location with LocationSerializer")
 data class LocationSection(
     val world: String,
     val x: Double,

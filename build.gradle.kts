@@ -8,9 +8,9 @@ repositories {
 }
 
 subprojects {
-    apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "com.gradleup.shadow")
-    apply(plugin = "maven-publish")
+    apply(plugin = rootProject.libs.plugins.kotlin.jvm.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.shadow.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.maven.publish.get().pluginId)
 
     group = "com.filkond"
 
@@ -30,9 +30,11 @@ subprojects {
         testImplementation(rootProject.libs.junit.jupiter)
         testRuntimeOnly(rootProject.libs.junit.platform.launcher)
 
+        testImplementation(rootProject.libs.mockbukkit)
+        testImplementation(rootProject.libs.paper.api)
+
         testImplementation(rootProject.libs.kotlin.stdlib)
         testImplementation(rootProject.libs.kotlin.reflect)
-        testImplementation(rootProject.libs.paper.api)
     }
 
     tasks.build {
@@ -66,7 +68,7 @@ subprojects {
     }
 
     kotlin {
-        jvmToolchain(17)
+        jvmToolchain(21)
     }
 
     tasks.test {

@@ -9,6 +9,7 @@ import com.filkond.paperktlib.config.ConfigElement
 import com.filkond.paperktlib.config.ReloadableConfig
 import com.filkond.paperktlib.config.manager.ConfigManager
 import com.filkond.paperktlib.config.manager.SimpleConfigManager
+import com.filkond.paperktlib.config.serializers.LocationSerializer
 import com.filkond.paperktlib.config.serializers.UUIDSerializer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -110,4 +111,5 @@ fun YamlConfigManager(configFolder: File) = SimpleConfigManager(
 
 fun paperKtLibSerializerModule(): SerializersModule = SerializersModule {
     contextual(UUIDSerializer)
+    contextual(LocationSerializer)
 }
