@@ -34,16 +34,31 @@ fun Inventory.removeForce(stack: ItemStack) {
     }
 }
 
-fun Inventory.removeIfContains(stack: ItemStack): Boolean = containsAny(stack).also {
+fun Inventory.removeIfContains(stack: ItemStack): Boolean = containsAtLeast(stack).also {
     if (it) removeForce(stack)
 }
 
-fun Inventory.removeIfContains(type: Material, amount: Int): Boolean = containsAny(type, amount).also {
+fun Inventory.removeIfContains(type: Material, amount: Int): Boolean = containsAtLeast(type, amount).also {
     if (it) removeForce(type, amount)
 }
 
-fun Inventory.containsAny(type: Material, amount: Int): Boolean = all(type).values.sumOf { it.amount } >= amount
-fun Inventory.containsAny(item: ItemStack): Boolean = all(item).values.sumOf { it.amount } >= item.amount
+fun Inventory.containsAtLeast(type: Material, amount: Int): Boolean {
+    var total = 0
+    all(type).values.forEach {
+        total += it.amount
+        if (total >= amount) return true
+    }
+    return false
+}
+
+fun Inventory.containsAtLeast(item: ItemStack): Boolean {
+    var total = 0
+    all(item).values.forEach {
+        total += it.amount
+        if (total >= item.amount) return true
+    }
+    return false
+}
 
 fun Inventory.toBase64(): String {
     val outputStream = ByteArrayOutputStream()
@@ -60,8 +75,8 @@ fun Inventory.toBase64(): String {
     return Base64Coder.encodeLines(outputStream.toByteArray())
 }
 
-fun String.inventoryFromBase64(): Inventory {
-    val inputStream = ByteArrayInputStream(Base64Coder.decodeLines(this))
+fun inventoryFromBase64(serializedInventory: String): Inventory {
+    val inputStream = ByteArrayInputStream(Base64Coder.decodeLines(serializedInventory))
     val dataInput = BukkitObjectInputStream(inputStream)
     val inventory = Bukkit.getServer().createInventory(null, dataInput.readInt())
 
