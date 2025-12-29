@@ -62,5 +62,4 @@ object LocationSerializer : KSerializer<Location> {
             Location(Bukkit.getWorld(world), x, y, z, yaw, pitch)
         }
     }
-
 }
