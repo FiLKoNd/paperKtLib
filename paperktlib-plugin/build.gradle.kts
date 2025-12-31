@@ -14,6 +14,7 @@ dependencies {
     implementation(project(":paperktlib-paper"))
     implementation(project(":paperktlib-adventure"))
     implementation(project(":paperktlib-config"))
+    implementation(project(":paperktlib-event-generator"))
 }
 
 tasks.processResources {

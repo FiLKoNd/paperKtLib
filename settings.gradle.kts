@@ -1,6 +1,7 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
+        mavenCentral()
     }
 }
 plugins {
@@ -12,5 +13,6 @@ include(
     "paperktlib-towny",
     "paperktlib-adventure",
     "paperktlib-config",
-    "paperktlib-paper"
+    "paperktlib-paper",
+    "paperktlib-event-generator",
 )

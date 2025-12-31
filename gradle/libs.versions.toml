@@ -7,6 +7,8 @@ kaml = "0.104.0"
 kotlinx-serialization = "1.10.0-RC"
 towny = "0.100.3.0"
 mockbukkit = "3.93.2"
+ksp = "2.3.4"
+kotlinpoet = "2.2.0"
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
@@ -19,10 +21,13 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kaml" }
 towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
 mockbukkit = { module = "com.github.seeseemelk:MockBukkit-v1.20", version.ref = "mockbukkit" }
+ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
+kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
+kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlinpoet" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 maven-publish = { id = "maven-publish" }
-
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
