@@ -10,11 +10,18 @@ repositories {
 ```
 
 ```kotlin
-val paperKtLibVersion = "1.3.4"
+plugins {
+    id("com.google.devtools.ksp")
+}
+
+val paperKtLibVersion = TODO() // see the latest version
 dependencies {
-    compileOnly("com.filkond:paperktlib-adventure:$paperKtLibVersion")
-    compileOnly("com.filkond:paperktlib-config:$paperKtLibVersion")
-    compileOnly("com.filkond:paperktlib-paper:$paperKtLibVersion")
-    compileOnly("com.filkond:paperktlib-towny:$paperKtLibVersion")
+    implementation("com.filkond:paperktlib-adventure:$paperKtLibVersion")
+    implementation("com.filkond:paperktlib-config:$paperKtLibVersion")
+    implementation("com.filkond:paperktlib-paper:$paperKtLibVersion")
+    implementation("com.filkond:paperktlib-towny:$paperKtLibVersion")
+    implementation("com.filkond:paperktlib-event-generator:$paperKtLibVersion")
+    
+    ksp("com.filkond:paperktlib-event-generator:$paperKtLibVersion")
 }
 ```
