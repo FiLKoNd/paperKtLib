@@ -42,13 +42,13 @@ subprojects {
     }
 
     tasks {
-        val sourcesJar by creating(Jar::class) {
+        val sourcesJar by registering(Jar::class) { ->
             archiveClassifier.set("sources")
             from(sourceSets.main.get().allSource)
             destinationDirectory.set(file("$rootDir/target"))
         }
 
-        val javadocJar by creating(Jar::class) {
+        val javadocJar by registering(Jar::class) { ->
             dependsOn.add(javadoc)
             archiveClassifier.set("javadoc")
             from(javadoc)
@@ -69,6 +69,25 @@ subprojects {
 
     kotlin {
         jvmToolchain(21)
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        }
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    tasks.compileTestJava {
+        sourceCompatibility = JavaVersion.VERSION_21.toString()
+        targetCompatibility = JavaVersion.VERSION_21.toString()
+    }
+
+    tasks.compileTestKotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+        }
     }
 
     tasks.test {
