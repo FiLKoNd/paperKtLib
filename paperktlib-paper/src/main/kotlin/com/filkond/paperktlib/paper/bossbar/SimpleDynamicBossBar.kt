@@ -35,7 +35,6 @@ class SimpleDynamicBossBar(
         bossBar.color(color())
         bossBar.overlay(overlay())
         bossBar.progress(progress().coerceIn(0.0f, 1.0f))
-
         bossBar.viewers().mapNotNull {
             it as? Audience
         }.forEach { if (shouldDisplay()) show(it) else hide(it) }
