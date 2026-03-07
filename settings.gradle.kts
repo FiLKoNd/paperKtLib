@@ -15,4 +15,5 @@ include(
     "paperktlib-config",
     "paperktlib-paper",
     "paperktlib-event-generator",
+    "paperktlib-bossbar",
 )

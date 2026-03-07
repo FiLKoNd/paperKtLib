@@ -1,4 +1,4 @@
-package com.filkond.paperktlib.paper.bossbar
+package com.filkond.paperktlib.bossbar
 
 import net.kyori.adventure.audience.Audience
 
@@ -8,3 +8,4 @@ interface DynamicBossBar {
     fun update()
     fun onRemove()
 }
+

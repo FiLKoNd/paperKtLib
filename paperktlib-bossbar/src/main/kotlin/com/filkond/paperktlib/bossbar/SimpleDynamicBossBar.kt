@@ -1,4 +1,4 @@
-package com.filkond.paperktlib.paper.bossbar
+package com.filkond.paperktlib.bossbar
 
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.bossbar.BossBar
@@ -57,3 +57,4 @@ class SimpleDynamicBossBar(
         fun build(): SimpleDynamicBossBar = SimpleDynamicBossBar(this)
     }
 }
+

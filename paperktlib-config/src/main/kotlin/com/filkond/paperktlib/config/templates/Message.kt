@@ -1,12 +1,15 @@
 package com.filkond.paperktlib.config.templates
 
 import com.filkond.paperktlib.adventure.ext.deserialize
-import io.papermc.paper.util.Tick
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import net.kyori.adventure.audience.Audience
+import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import net.kyori.adventure.title.Title
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
+import kotlin.time.toJavaDuration
 
 @Serializable
 sealed class Message : Sendable {
@@ -40,6 +43,8 @@ data class ActionMessage(
     }
 }
 
+const val TICK_IN_MILLIS: Long = 50L
+
 @Serializable
 @SerialName("title")
 data class TitleMessage(
@@ -55,9 +60,9 @@ data class TitleMessage(
             title.deserialize(*resolvers, isLegacy = legacy),
             subtitle.deserialize(*resolvers, isLegacy = legacy),
             Title.Times.times(
-                Tick.of(fadeIn),
-                Tick.of(stay),
-                Tick.of(fadeOut)
+                (fadeIn * TICK_IN_MILLIS).toDuration(DurationUnit.MILLISECONDS).toJavaDuration(),
+                (stay * TICK_IN_MILLIS).toDuration(DurationUnit.MILLISECONDS).toJavaDuration(),
+                (fadeOut * TICK_IN_MILLIS).toDuration(DurationUnit.MILLISECONDS).toJavaDuration()
             )
         )
     }

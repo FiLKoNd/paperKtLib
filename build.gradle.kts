@@ -24,14 +24,19 @@ subprojects {
     dependencies {
         compileOnly(rootProject.libs.kotlin.stdlib)
         compileOnly(rootProject.libs.kotlin.reflect)
-        compileOnly(rootProject.libs.paper.api)
+        compileOnly(rootProject.libs.log4j.api)
+        if (project.name != "paperktlib-bossbar") {
+            compileOnly(rootProject.libs.paper.api)
+        }
 
         testImplementation(platform(rootProject.libs.junit.bom))
         testImplementation(rootProject.libs.junit.jupiter)
         testRuntimeOnly(rootProject.libs.junit.platform.launcher)
 
         testImplementation(rootProject.libs.mockbukkit)
-        testImplementation(rootProject.libs.paper.api)
+        if (project.name != "paperktlib-bossbar") {
+            testImplementation(rootProject.libs.paper.api)
+        }
 
         testImplementation(rootProject.libs.kotlin.stdlib)
         testImplementation(rootProject.libs.kotlin.reflect)
@@ -69,14 +74,18 @@ subprojects {
 
     kotlin {
         jvmToolchain(21)
-        compilerOptions {
-            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_16)
+        if (project.name != "paperktlib-bossbar") {
+            compilerOptions {
+                jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_16)
+            }
         }
     }
 
-    java {
-        sourceCompatibility = JavaVersion.VERSION_16
-        targetCompatibility = JavaVersion.VERSION_16
+    if (project.name != "paperktlib-bossbar") {
+        java {
+            sourceCompatibility = JavaVersion.VERSION_16
+            targetCompatibility = JavaVersion.VERSION_16
+        }
     }
 
     tasks.compileTestJava {
