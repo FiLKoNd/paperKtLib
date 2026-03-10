@@ -1,17 +1,15 @@
-val paperVersion = "1.21.4-R0.1-SNAPSHOT"
-
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:$paperVersion")
+    compileOnly(rootProject.libs.paper.api.new)
 }
 
 kotlin {
     compilerOptions {
-        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     }
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 

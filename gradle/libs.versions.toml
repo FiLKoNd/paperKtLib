@@ -1,7 +1,8 @@
 [versions]
 kotlin = "2.3.0"
 shadow = "9.3.0"
-paper = "1.16.5-R0.1-SNAPSHOT"
+paperOld = "1.16.5-R0.1-SNAPSHOT"
+paperNew = "1.20.4-R0.1-SNAPSHOT"
 junit = "6.0.1"
 kaml = "0.104.0"
 kotlinx-serialization = "1.10.0-RC"
@@ -14,7 +15,8 @@ log4j = "2.24.3"
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
-paper-api = { module = "com.destroystokyo.paper:paper-api", version.ref = "paper" }
+paper-api = { module = "com.destroystokyo.paper:paper-api", version.ref = "paperOld" }
+paper-api-new = { module = "io.papermc.paper:paper-api", version.ref = "paperNew" }
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
